@@ -1,5 +1,6 @@
 const { parse } = require('csv-parse');
 const fs = require('fs');
+const { get } = require('http');
 const path = require('path');
 
 
@@ -36,9 +37,14 @@ function loadPlanetsData() {
     });
 }
 
+//Send data back to controller with function not directly
+function getAllPlanets(){
+    return results;
+}
+
 
 
 module.exports = {
     loadPlanetsData,
-    planets: results,
+    getAllPlanets,
 };
