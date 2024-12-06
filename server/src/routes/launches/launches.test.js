@@ -44,7 +44,7 @@ describe('Test POST /launch', () => {
         expect(requestDate).toBe(responseDate);
 
         expect(response.body).toMatchObject(launchDataWithoutDate);
-    })
+    });
 
     test('It should catch missing required properties', async () => {
         const response = await request(app)
@@ -56,7 +56,7 @@ describe('Test POST /launch', () => {
         expect(response.body).toStrictEqual({
             error: 'Missing required launch property'
         });
-    })
+    });
 
     test('It should catch invalid dates', async() => {
         const response = await request(app)
