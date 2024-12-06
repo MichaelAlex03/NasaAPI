@@ -23,7 +23,7 @@ function existsLaunchWithId(launchId){
 function abortLaunchById(launchId){
     const aborted = launches.get(launchId);
     aborted.upcoming = false;
-    aborted.sucess = false;
+    aborted.success = false;
     return aborted
 }
 
