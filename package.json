@@ -133,6 +133,7 @@
     "start:client": "cd client && npm start",
     "start:server": "cd server && npm run watch",
     "deploy": "cd client && npm run build && cd .. && cd server && npm run start",
+    "deploy-cluster": "cd client && npm run build && cd .. && cd server && npm run cluster",
     "test": "npm-run-all cd client && npm test && cd .. && cd server && npm test"
   },
   "keywords": [],
