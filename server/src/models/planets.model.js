@@ -31,7 +31,7 @@ function loadPlanetsData() {
                 reject(err);
             })
             .on('end', () => {
-                console.log('testtt');
+                console.log('Planet data finished loading in');
                 resolve(); //resolve when all data has been streamed in and parsed
             })
     });
@@ -41,8 +41,6 @@ function loadPlanetsData() {
 function getAllPlanets(){
     return results;
 }
-
-
 
 module.exports = {
     loadPlanetsData,
