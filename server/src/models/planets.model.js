@@ -3,6 +3,8 @@ const fs = require('fs');
 const { get } = require('http');
 const path = require('path');
 
+const planets = require('./planets.mongo')
+
 
 const results = []; //array of habitable planets
 
@@ -21,25 +23,40 @@ function loadPlanetsData() {
                 comment: '#',
                 columns: true,
             }))
-            .on('data', (data) => {
+            .on('data', async (data) => {
                 if (isHabitablePlanet(data)) {
-                    results.push(data);
+                    await savePlanets(data);
                 }
             })
             .on('error', (err) => {
                 console.log(err);
                 reject(err);
             })
-            .on('end', () => {
-                console.log('Planet data finished loading in');
+            .on('end', async() => {
+                const countPlanetsFound = (await getAllPlanets()).length
+                console.log(`${countPlanetsFound} Planets finished loading in`);
                 resolve(); //resolve when all data has been streamed in and parsed
             })
     });
 }
 
 //Send data back to controller with function not directly
-function getAllPlanets(){
-    return results;
+async function getAllPlanets(){
+    return await planets.find({});
+}
+
+async function savePlanets(planet){
+    try{
+        await planets.updateOne({
+            keplerName: planet.kepler_name,
+        }, {
+            keplerName: planet.kepler_name
+        }, {
+            upsert: true,
+        });
+    } catch(err){
+        console.error(`Could not save error ${err}`);
+    }
 }
 
 module.exports = {
