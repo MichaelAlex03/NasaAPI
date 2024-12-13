@@ -3,8 +3,8 @@ const planets = require('./planets.mongo');
 
 const launches = new Map();
 
-let latestFlightNumber = 100;
 
+const DEFAULT_FLIGHT_NUMBER = 100;
 
 const launch = {
     flightNumber: 100,
@@ -31,6 +31,18 @@ function abortLaunchById(launchId){
     return aborted
 }
 
+async function getLatestFlightNumber(){
+    const latestLaunch = await launchesDatabase
+        .findOne()
+        .sort('-flightNumber'); //sort by descending order as findOne takes first document in list of documents. Reverse sort by putting negative in front field name
+    
+        if(!latestLaunch) {
+            return DEFAULT_FLIGHT_NUMBER;
+        }
+    
+    return latestLaunch.flightNumber;
+}
+
 async function getAllLaunches(){
     return await launchesDatabase.find({}, {
         '__v': 0,
@@ -54,21 +66,21 @@ async function saveLaunch(launch){
     });
 }
 
-function addNewLaunch(launch){
-    latestFlightNumber += 1;
-    launches.set(
-        latestFlightNumber, 
-        Object.assign(launch, {
-            upcoming: true,
-            sucess: true,
-            customer: ['Zero To Mastery', 'Nasa'],
-            flightNumber: latestFlightNumber,
-    }));
+async function scheduleNewLaunch(launch){
+    const newFlightNumber = await getLatestFlightNumber() + 1;
+    const newLaunch = Object.assign(launch, { 
+        upcoming: true,
+        success: true,
+        customer: ['Zero To Mastery', 'Nasa'],
+        flightNumber: newFlightNumber,
+    });
+    await saveLaunch(newLaunch);
 }
+
 
 module.exports = {
     existsLaunchWithId,
     abortLaunchById,
     getAllLaunches,
-    addNewLaunch,
+    scheduleNewLaunch
 }
