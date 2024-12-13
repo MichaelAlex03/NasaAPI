@@ -59,7 +59,8 @@ async function saveLaunch(launch){
         throw new Error('No Matching planet found');
     }
 
-    await launchesDatabase.updateOne({
+    //FindOneAndUpdate only returns values that we updated getting rid of the setOnInsert property added
+    await launchesDatabase.findOneAndUpdate({
         flightNumber: launch.flightNumber
     }, launch, {
         upsert: true
