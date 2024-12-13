@@ -5,9 +5,9 @@ const {
     abortLaunchById,
 } = require('../../models/launches.model');
 
-//Have to change values from launches into array so it can be converted into json for frontend to access
-function httpGetAllLaunches(req, res){
-    return res.status(200).json(getAllLaunches());
+
+async function httpGetAllLaunches(req, res){
+    return res.status(200).json(await getAllLaunches());
 }
 
 function httpAddNewLaunch(req, res){
@@ -29,7 +29,7 @@ function httpAddNewLaunch(req, res){
     } //will return invalid date if what was passed in cant be turned into a valid date
 
     addNewLaunch(launch);
-    return res.status(201).json(launch); //good practice to send back info given for post request to make sure request is processed
+    return res.status(201).json(launch);
 }
 
 function httpAbortLaunch(req, res){
