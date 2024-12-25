@@ -1,0 +1,18 @@
+FROM node:lts-alpine
+
+WORKDIR /app
+
+#Copies all files from nasaproject into app
+COPY . . 
+
+RUN npm install --only=production
+
+RUN npm run build --prefix client
+
+#Setting user to node reduces what user can do compared to root user
+USER node
+
+#Only need to start server since build files go into server
+CMD [ "npm", "start", "--prefix", "server"]
+
+EXPOSE 8000
