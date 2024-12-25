@@ -3,11 +3,18 @@ FROM node:lts-alpine
 WORKDIR /app
 
 #Copies all files from nasaproject into app
-COPY . . 
+COPY package*.json ./
 
-RUN npm install --only=production
+COPY client/package*.json client/
+RUN npm run install-client --only=production
 
+COPY server/package*.json server/
+RUN npm run install-server --only=production
+
+COPY client/ client/
 RUN npm run build --prefix client
+
+COPY server/ server/
 
 #Setting user to node reduces what user can do compared to root user
 USER node
